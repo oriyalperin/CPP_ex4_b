@@ -7,13 +7,12 @@
 #include <unordered_set>
 #include "Player.hpp"
 
-using namespace std;
 using namespace pandemic;
 
 class FieldDoctor:public Player{
 
     public:
-        FieldDoctor(Board &b, City c);
+        FieldDoctor (Board &b, City c) : Player(b,c){}
         virtual Player& treat(City city);
-        virtual string role();
+        virtual std::string role();
 };

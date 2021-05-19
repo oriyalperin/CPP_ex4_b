@@ -7,15 +7,14 @@
 #include <unordered_set>
 #include "Player.hpp"
 
-using namespace std;
 using namespace pandemic;
 
 class OperationsExpert:public Player{
 
     public:
-        OperationsExpert(Board &b, City c);
+        OperationsExpert (Board &b, City c) : Player(b,c){}
         virtual Player& build();
-        virtual string role();
+        virtual std::string role();
 
 };
 

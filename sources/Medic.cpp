@@ -9,14 +9,10 @@
 using namespace std;
 using namespace pandemic;
 
-Medic::Medic (Board &b, City c) : Player(b,c)
-{}
-
 Player& Medic::drive(City city)
 {
     Player::drive(city);
-    Color color=board.cities.at(city).color;
-    if(board.diseases.at(color))
+    if(cure_for_disease(city_color(city)))
     {
         board[city]=0;
     }
@@ -25,8 +21,7 @@ Player& Medic::drive(City city)
 Player& Medic::fly_direct(City city)
 {
     Player::fly_direct(city);
-    Color color=board.cities.at(city).color;
-    if(board.diseases.at(color))
+    if(cure_for_disease(city_color(city)))
     {
         board[city]=0;
     }
@@ -35,8 +30,7 @@ Player& Medic::fly_direct(City city)
 Player& Medic::fly_charter(City city)
 {
     Player::fly_charter(city);
-    Color color=board.cities.at(city).color;
-    if(board.diseases.at(color))
+    if(cure_for_disease(city_color(city)))
     {
         board[city]=0;
     }
@@ -45,8 +39,7 @@ Player& Medic::fly_charter(City city)
 Player& Medic::fly_shuttle(City city)
 {
     Player::fly_shuttle(city);
-    Color color=board.cities.at(city).color;
-    if(board.diseases.at(color))
+    if(cure_for_disease(city_color(city)))
     {
         board[city]=0;
     }
@@ -56,16 +49,15 @@ Player& Medic::fly_shuttle(City city)
 Player& Medic::treat(City city)
 {
     if(curr_city!=city)
-        {
-            throw invalid_argument("The current city is diffrent");
-        }
+    {
+            throw invalid_argument("The current city is different");
+    }
         
-        if(board.cities.at(city).cubes==0)
-        {
-            throw out_of_range("The current city is free of contamination");
-        }
-        board[city]=0;
-
+    if(board[city]==0)
+    {
+        throw out_of_range("The current city is free of contamination");
+    }
+    board[city]=0;
     return *this;
 }
 

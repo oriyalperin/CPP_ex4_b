@@ -7,15 +7,14 @@
 #include <unordered_set>
 #include "Player.hpp"
 
-using namespace std;
 using namespace pandemic;
 
 class Scientist:public Player{
 
     private:
-        int droped_cards;
+        int cards_to_throw;
     public:
-        Scientist(Board &b, City c,int n);
+        Scientist (Board &b, City c,int n) : Player(b,c), cards_to_throw(n){}
         virtual Player& discover_cure(Color color); 
         virtual string role();
 };

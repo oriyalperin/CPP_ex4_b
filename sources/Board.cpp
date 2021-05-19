@@ -1,39 +1,26 @@
 
 #include <iostream>
-
 #include <string>
 #include "City.hpp"
 #include "Color.hpp"
-#include <map>
 #include <unordered_set>
 #include <fstream>
 #include <sstream>
 #include <array>
-#include <list>
 #include "Board.hpp"
 #include <sstream>
-
 using namespace std;
 using namespace pandemic;
-
+namespace pandemic
+{
 
 Board::Board()
 {
-    
     ifstream cities_file{"cities_map.txt"};
-    read_cities(cities_file);
-    diseases[Color::Black]=false;
-    diseases[Color::Blue]=false;
-    diseases[Color::Red]=false;
-    diseases[Color::Yellow]=false;
-
-}
-string& Board::get_city_name(City city)
-{
-    return cities.at(city).name;
+    read_cities_diseases(cities_file);
 }
 
-void Board::read_cities(ifstream& cities_file)
+void Board::read_cities_diseases(ifstream& cities_file)
 {
     int color=1;
     int city=2;
@@ -52,10 +39,11 @@ void Board::read_cities(ifstream& cities_file)
             others.insert(static_cast<City>(city_other));
         }
         cities.insert(pair<City,city_dtls>(static_cast<City>(city),city_dtls(name,(Color)color,others)));
-        //cout<<cities.at((City)city).name<<endl;
     }
-    
-
+    diseases[Color::Black]=
+    diseases[Color::Blue]=
+    diseases[Color::Red]=
+    diseases[Color::Yellow]=false;
 }
 
 int& Board::operator[](City city) 
@@ -70,8 +58,11 @@ int& Board::operator[](City city)
     }
     
 }
-
-string convert_disease(Color color)
+string Board::get_city_name(City city)
+{
+    return cities.at(city).name;
+}
+string get_disease_name(Color color)
 {
     int x=(int)color;
     switch (x)
@@ -89,7 +80,8 @@ string convert_disease(Color color)
         throw invalid_argument("illegal color");
     }
 }
-ostream& pandemic::operator<< (ostream& os, const Board& board)
+
+ostream& operator<< (ostream& os, const Board& board)
 {
     for(const auto& city: board.cities)
     {
@@ -107,23 +99,21 @@ ostream& pandemic::operator<< (ostream& os, const Board& board)
         {
             cout<<" ";
         }
-        //cout<<"|"<<endl;
         cout<<endl;
-        cout<<"| Color: "<<convert_disease(city.second.color)<<endl
+        cout<<"| Color: "<<get_disease_name(city.second.color)<<endl
         <<"| Disease: " <<city.second.cubes <<endl
-        <<"| Reasrch Station: " << rs <<endl;
+        <<"| Research Station: " << rs <<endl;
     }
     cout<<endl;
     for(const auto& color: board.diseases)
     {
-        string c=convert_disease(color.first);
+        string c=get_disease_name(color.first);
         char treat =(color.second)?  'V': 'X';
         cout<<c<<", cure: " <<treat<<endl;
 
     }
     return os;
 }
-
 
 bool Board::is_clean()
 {
@@ -153,3 +143,11 @@ void Board::remove_stations()
     }
 }
 
+void Board::show_diseases()
+{
+    for(auto& d:diseases)
+    {
+        cout<<get_disease_name(d.first)<<":"<<d.second<<endl;
+    }
+}
+}

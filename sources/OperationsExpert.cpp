@@ -9,13 +9,9 @@
 using namespace std;
 using namespace pandemic;
 
-OperationsExpert::OperationsExpert (Board &b, City c) : Player(b,c)
-{}
-
-
 Player& OperationsExpert::build()
 {
-    board.cities.at(curr_city).rsrch_st=true;
+    research_station(curr_city)=true;
     return *this;
 }
 

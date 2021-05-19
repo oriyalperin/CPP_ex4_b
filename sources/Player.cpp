@@ -7,22 +7,9 @@
 using namespace std;
 using namespace pandemic;
 
-    void Player::throw_card(City city)
-    {
-        cards.erase(city);
-        colors.at((unsigned)board.cities.at(city).color)--;
-    }
-
-    Player& Player::remove_cards()
-    {
-        cards.clear();
-        return *this;
-    }
-
-    bool Player::is_nbr(City city)
-    {
-        return (board.cities.at(curr_city).nbrs.find(city)!=board.cities.at(curr_city).nbrs.end());
-    }
+namespace pandemic
+{
+    
     Player& Player::drive(City city)
     {
         if(city==curr_city)
@@ -91,7 +78,6 @@ using namespace pandemic;
 
     }
 
-
     Player& Player::build()
     {
         if(cards.find(curr_city)==cards.end())
@@ -114,15 +100,15 @@ using namespace pandemic;
         if(!board.diseases.at(color))
         {   
             int count=0;
-            const int droped_cards=5;
+            const int cards_to_throw=5;
             const int cards_in_color=amnt_by_clr(color);
-            if(cards_in_color<droped_cards)
+            if(cards_in_color<cards_to_throw)
             {
                 throw invalid_argument("There are only " +to_string(cards_in_color) +
-                ", you need " + to_string(droped_cards-cards_in_color) + " more");
+                ", you need " + to_string(cards_to_throw-cards_in_color) + " more");
             }
                 unordered_set<City>::iterator it = cards.begin();
-                while(it!=cards.end() && count<droped_cards)
+                while(it!=cards.end() && count<cards_to_throw)
                 {
                     if(board.cities.at(*it).color==color)
                     {
@@ -157,14 +143,11 @@ using namespace pandemic;
         }
         if(board.diseases.at(board.cities.at(city).color))
         {
-            //board.size_cubes()-= board.cities.at(city).cubes;
             board.cities.at(city).cubes=0;
         }
         else
         {
             board[city]-=1;
-           // cout<<board.cities.at(city).cubes<<endl;
-            //board.size_cubes()-=1;
         }
         return *this;
     }
@@ -174,13 +157,11 @@ using namespace pandemic;
         return colors.at(static_cast<unsigned>(color));
     }
 
-
     Player& Player::take_card(City city)
     { 
         if(cards.find(city)==cards.end())
         {
             cards.insert(city);
-            
             colors.at(static_cast<unsigned>(board.cities.at(city).color))++;
         }
         return *this;
@@ -192,3 +173,63 @@ using namespace pandemic;
         return "Player";
     }
 
+    void Player::throw_card(City city)
+    {
+        cards.erase(city);
+        colors.at(static_cast<unsigned>(board.cities.at(city).color))--;
+    }
+
+    Player& Player::remove_cards()
+    {
+        cards.clear();
+        return *this;
+    }
+
+    bool Player::is_nbr(City city)
+    {
+        return (board.cities.at(curr_city).nbrs.find(city)!=board.cities.at(curr_city).nbrs.end());
+    }
+
+    bool& Player::research_station(City city)
+    {
+        return board.cities.at(city).rsrch_st;
+    }
+
+    bool& Player::cure_for_disease(Color color)
+    {
+        return board.diseases.at(color);
+    }
+    
+    Color Player::city_color(City city)
+    {
+        return board.cities.at(city).color;
+    }
+
+    //only for main
+    void Player::show_cards()
+    {
+        cout<<"|*************************|"<<endl;
+        cout<<" "<<role()<<endl;
+        cout<<"|*************************|"<<endl;
+        for(const auto& city: cards)
+        {
+            cout<<"|-------------------------|"<<endl;
+            cout<<"|";
+            string name=board.cities.at(city).name+":"+get_disease_name(city_color(city));
+            const int middle=26;
+            for(int i=0;i<(middle-name.size())/2;i++)
+            {
+                cout<<" ";
+            }
+            cout<<" "<<name<< endl;
+            cout<<"|-------------------------|"<<endl;
+        }
+        
+    }
+
+    //only for main
+    void Player::show_curr_city()
+    {
+        cout<<role()<<" current city : "<<board.cities.at(curr_city).name<<endl;
+    }
+}

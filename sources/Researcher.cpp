@@ -9,21 +9,20 @@
 using namespace std;
 using namespace pandemic;
 
-Researcher::Researcher (Board &b, City c) : Player(b,c)
-{}
+
 
 Player& Researcher::discover_cure(Color color)
 {
-        if(!board.diseases.at(color))
+        if(!cure_for_disease(color))
         {   
             unordered_set<City>::iterator it = cards.begin();
             int count=0;
-            const int droped_cards=5;
-            if(Player::amnt_by_clr(color)>=droped_cards)
+            const int cards_to_throw=5;
+            if(Player::amnt_by_clr(color)>=cards_to_throw)
             {
-                while(it!=cards.end() && count<droped_cards)
+                while(it!=cards.end() && count<cards_to_throw)
                 {
-                    if(board.cities.at(*it).color==color)
+                    if(city_color(*it)==color)
                     {
                         City city=*it;
                         it++;
@@ -35,11 +34,11 @@ Player& Researcher::discover_cure(Color color)
                         it++;
                     }
                 }
-                    board.diseases.at(color)=true;
+                    cure_for_disease(color)=true;
             }
             else
             {
-                throw invalid_argument("There are no enough cards to discovre a cure");
+                throw invalid_argument("There are no enough cards to discover a cure");
             }
         }
     return *this;

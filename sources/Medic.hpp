@@ -7,16 +7,15 @@
 #include <unordered_set>
 #include "Player.hpp"
 
-using namespace std;
 using namespace pandemic;
 
 class Medic:public Player{
     public:
-        Medic(Board &b, City c);
+        Medic(Board &b, City c) : Player(b,c){}
         virtual Player& drive(City city);
         virtual Player& fly_direct(City city);
         virtual Player& fly_charter(City city);
         virtual Player& fly_shuttle(City city);
         virtual Player& treat(City city);
-        virtual string role();
+        virtual std::string role();
 };

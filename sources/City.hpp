@@ -4,7 +4,7 @@
 #include "Color.hpp"
 using namespace std;
 static const int size_city=48;
-
+namespace pandemic{
 enum class City{
 
 Algiers,
@@ -58,7 +58,7 @@ Washington
 
 };
 
-typedef class city_dtls
+class city_dtls
 {
     public:
     string name;
@@ -68,7 +68,10 @@ typedef class city_dtls
     unordered_set<City> nbrs;
     city_dtls(string name, Color color,unordered_set <City> nbrs) : 
     name(name), color(color), cubes(0),rsrch_st(false), nbrs(nbrs) {};
-}city_dtls;
+
+};
+
+}
 
 
 

@@ -1,15 +1,18 @@
 #pragma once
-
 #include <ostream>
 using namespace std;
-enum class Color{
+namespace pandemic
+{
+    enum class Color{
 
-    Blue,
-    Yellow,
-    Black,
-    Red
+        Blue,
+        Yellow,
+        Black,
+        Red
 
-};
+    };
 
 
+std::string get_disease_name(Color color);
+}
 

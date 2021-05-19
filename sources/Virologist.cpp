@@ -9,13 +9,12 @@
 using namespace std;
 using namespace pandemic;
 
-Virologist::Virologist (Board &b, City c) : Player(b,c)
-{}
+
 
 Player& Virologist::treat(City city)
 {
         
-        if(board.cities.at(city).cubes==0)
+        if(board[city]==0)
         {
             throw out_of_range("The city is free of contamination");
         }
@@ -25,9 +24,9 @@ Player& Virologist::treat(City city)
             throw out_of_range("The city card is missing");
         }
 
-        if(board.diseases.at(board.cities.at(city).color))
+        if(cure_for_disease(city_color(city)))
         {
-            board.cities.at(city).cubes=0;
+            board[city]=0;
         }
         else
         {
